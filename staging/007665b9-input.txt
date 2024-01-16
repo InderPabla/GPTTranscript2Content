@@ -1,0 +1,6 @@
+file '<FullPathToContent>/content/13b5dcf0-1705216404253-0.png'
+duration 5
+file '<FullPathToContent>/content/13b5dcf0-1705216418417-0.png'
+duration 5
+file '<FullPathToContent>/content/1704580818139-0.png'
+duration 5
