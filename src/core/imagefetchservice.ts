@@ -1,5 +1,4 @@
 import axios from "axios";
-import { IGPTResponse, IGPTUrlResult } from "./gptservice";
 import fs from 'fs';
 
 export interface IImageFetchService {

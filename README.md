@@ -33,26 +33,27 @@ To install this tool, follow these steps:
    ```bash
    npm install
    
+4. Add OPENAI_API_KEY in environment variables
+    ```bash
+    Ex: In powershell
+    $Env:OPENAI_API_KEY = "<OPENAI_API_KEY>"
+
 ## Usage
 Once you have installed the tool and met the prerequisites, you can use it to convert transcripts into content using GPT-3.
 
 To get started, run the following command:
 
-    Options
-    -i, --imagePrompt <imagePrompt>: Image Prompt (Specify an image prompt for GPT-3)
-    -t, --transcriptFile <transcriptFile>: Transcript File (Specify the transcript file to be converted)
-    -f, --ffmpeg <ffmpeg>: FFMPEG.exe path (Specify the path to the FFMPEG executable)
-    -s, --toSpeech: Convert transcript to speech (Enable this option to convert the transcript to speech)
+    ### Options
+    - `-t, --transcriptFile <transcriptFile>`: Transcript File (Specify the transcript file to be converted)
+    - `-f, --ffmpeg <ffmpeg>`: FFMPEG.exe path (Specify the path to the FFMPEG executable)
+    - `-s, --toSpeech`: Convert transcript to speech (Enable this option to convert the transcript to speech)
+    - `-v, --toVideo`: Convert transcript to video (Enable this option to convert the transcript to video)
+    - `-u, --toImages`: Convert transcript to images (Enable this option to convert the transcript to images)
+
     For example, to convert a transcript to content with an image prompt and FFMPEG path, you can use the following command:
 
-    npm start -- --imagePrompt="Create an image of a fractal world with unparalleled confusion."
-        - Create an image given a prompt
-
-    npm start -- --transcriptFile="./content/wheel-transcript.txt" --ffmpeg="/path/to/ffmpeg.exe"
-        - Create a video and list of images given a transcript
-
-    npm start -- --transcriptFile="./content/wheel-transcript.txt" --toSpeech
-        - Create an audio .mp3 from a given transcript
+    npm start --transcriptFile="./transcripts/wheel-transcript.txt" --ffmpeg="/path/to/ffmpeg.exe" --toVideo --toSpeech
+        - Create a speech and video animation given transcript and ffmpeg path
 
 
 
