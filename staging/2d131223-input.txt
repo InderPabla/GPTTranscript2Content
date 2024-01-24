@@ -1,0 +1,10 @@
+file 'D:/Users/InderTheGreat/Documents/Github/AutoShortPipeline/content/2d131223-1705748553646-0.png'
+duration 5
+file 'D:/Users/InderTheGreat/Documents/Github/AutoShortPipeline/content/2d131223-1705748568802-0.png'
+duration 5
+file 'D:/Users/InderTheGreat/Documents/Github/AutoShortPipeline/content/2d131223-1705748584062-0.png'
+duration 5
+file 'D:/Users/InderTheGreat/Documents/Github/AutoShortPipeline/content/2d131223-1705748598223-0.png'
+duration 5
+file 'D:/Users/InderTheGreat/Documents/Github/AutoShortPipeline/content/2d131223-1705748613583-0.png'
+duration 5

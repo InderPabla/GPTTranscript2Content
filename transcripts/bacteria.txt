@@ -1,0 +1,8 @@
+Our journey begins in the early 20th century, with the discovery of bacteriophages by Frederick Twort and Félix d'Hérelle, two pioneering scientists who observed these tiny entities that infect bacteria.
+These microscopic predators, aptly named bacteriophages (meaning 'bacteria-eaters'), opened a new chapter in microbiology, as they were found to be viruses that exclusively target bacteria.
+The study of bacteriophages not only provided insights into the intricacies of viral infection but also laid the foundation for phage therapy, an innovative approach to combating bacterial infections.
+Bacteriophages demonstrated remarkable specificity, with each type targeting a particular bacterial strain, a feature that ignited interest in their potential as natural antibiotics.
+Over the decades, phage therapy gained traction in Eastern Europe, particularly in countries like Georgia and Poland, where it was used to treat bacterial infections, including antibiotic-resistant strains.
+In the West, the advent of antibiotics temporarily overshadowed phage therapy, but recent concerns about antibiotic resistance have rekindled interest in these bacterial predators.
+Today, bacteriophages continue to be an area of intense research, with potential applications ranging from medicine to biotechnology, offering a promising avenue in the battle against antibiotic-resistant bacteria.
+The history of bacteriophages reflects the ongoing quest for innovative solutions in microbiology and medicine, as we harness these ancient viruses to tackle modern bacterial challenges."

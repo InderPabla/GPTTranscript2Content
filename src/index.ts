@@ -1,7 +1,7 @@
 import { GPTService, IGPTService } from "./core";
 import { program } from 'commander';
 import { IImageFetchService, LocalImageFetchSaveService } from "./core/imagefetchservice";
-import { TRANSCRIPT_PRIMER } from "./core/primerconst";
+import { TRANSCRIPT_PRIMER_POLICYFOLLOW_MANYIMAGES, TRANSCRIPT_PRIMER_POLICYFOLLOW_LOWIMAGES } from "./core/primerconst";
 import { v4 as uuidv4 } from 'uuid';
 import { validateMinMax } from "./core/utils";
 import { IVideoService, LocalVideoService } from "./core/videoservice";
@@ -37,20 +37,22 @@ program.parse(process.argv);
     const gptService: IGPTService = new GPTService();
     const fetchService: IImageFetchService = new LocalImageFetchSaveService();
     const videoService: IVideoService = new LocalVideoService(options.ffmpeg!);
-    const contentService: ITranscript2Content = new BasicTranscript2Content(gptService, videoService, fetchService, options.transcriptFile!, prefix, TRANSCRIPT_PRIMER);
+    const contentService: ITranscript2Content = new BasicTranscript2Content(gptService, videoService, fetchService, options.transcriptFile!, prefix, TRANSCRIPT_PRIMER_POLICYFOLLOW_MANYIMAGES);
 
     if(options.toSpeech || options.toImages || options.toVideo) {
         if(options.toSpeech) {
             console.log("GPTTranscript2Content: To speech");
             await contentService.toSpeech();
         }
-        if(options.toVideo) {
-            console.log("GPTTranscript2Content: To video and images");
-            await contentService.toVideo();
-        }
-        else if(options.toImages){
+
+        if(options.toImages){
             console.log("GPTTranscript2Content: To image");
             await contentService.toImages();
+        }
+
+        if(options.toVideo){
+            console.log("GPTTranscript2Content: To video");
+            await contentService.toVideo();
         }
     }
     else {

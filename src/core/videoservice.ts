@@ -6,7 +6,7 @@ import { delay } from "./utils";
 import { spawn } from'child_process';
 
 export interface IVideoService {
-    gen(imagesPaths: string[], videoPrefix:string): Promise<string | undefined>;
+    gen(imagesPaths: string[], audioPath: string | undefined, videoPrefix:string): Promise<string | undefined>;
 }
 
 export class LocalVideoService implements IVideoService {
@@ -17,16 +17,17 @@ export class LocalVideoService implements IVideoService {
         this._ffmpegPath = ffmpegPath;
     }
 
-    async gen(imagesPaths: string[], videoPrefix:string): Promise<string | undefined> {
+    async gen(imagesPaths: string[], audioPath: string | undefined, videoPrefix:string): Promise<string | undefined> {
         const inputFile = path.resolve(`./staging/${videoPrefix}-input.txt`).replace(/\\/g,'/');
-        const outputFile = path.resolve(`./staging/${videoPrefix}-output.mp4`).replace(/\\/g,'/');
+        const outputSoundlessMp4Path = path.resolve(`./staging/${videoPrefix}-output-soundless.mp4`).replace(/\\/g,'/');
+        const outputSoundMp4Path = path.resolve(`./staging/${videoPrefix}-output-sound.mp4`).replace(/\\/g,'/');
         let inputFileStr = '';
-        
+
         for (const image of imagesPaths) {
             let retry = 5;
             while(retry>0) {
                 if (fs.existsSync(image)) {
-                    inputFileStr +=`file '${path.resolve(image).replace(/\\/g,'/')}'\nduration 5\n`;
+                    inputFileStr +=`file '${path.resolve(image).replace(/\\/g,'/')}'\nduration 15\n`;
                     retry = 0; break;
                 }
                 else {
@@ -38,25 +39,49 @@ export class LocalVideoService implements IVideoService {
         }
         fs.writeFileSync(inputFile,inputFileStr);
 
-        const ffmpegCommand = [
+        const ffmpegCommandToSoundlessMp4 = [
             '-f', 'concat',
             '-safe', '0',
-            '-i', inputFile,
-            '-vf', "zoompan=z='min(zoom+0.0015,1.5)':s=1024x1024:d=250",
-            '-r', '30',
-            outputFile
+            '-i', inputFile
         ];
+
+        ffmpegCommandToSoundlessMp4.push(...[
+            '-c:v', 'libx264',
+            '-pix_fmt', 'yuv420p',
+            '-r', '31',
+            '-vf', "zoompan=z='min(zoom+0.0015,1.5)':s=1024x1024:d=450",
+            '-f', 'mp4'
+        ]);
+        
+        ffmpegCommandToSoundlessMp4.push(outputSoundlessMp4Path);
+
+        const ffmpegCommandToSoundMp4 = [
+            '-i', outputSoundlessMp4Path,
+            '-i', audioPath,
+            '-c:v', 'copy',
+            '-c:a', 'aac',
+            outputSoundMp4Path,
+        ];
+
         console.log("inputFileStr:",inputFileStr);
         console.log("inputFile:",inputFile);
-        console.log("outputFile:",outputFile);
-        console.log("ffmpegCommand:",ffmpegCommand);
+        console.log("imagesPaths:",imagesPaths);
+        console.log("audioPath:",audioPath);
+        console.log("outputSoundlessMp4Path:",outputSoundlessMp4Path);
+        console.log("outputSoundMp4Path:",outputSoundMp4Path);
+        console.log("ffmpegCommandToSoundlessMp4:",ffmpegCommandToSoundlessMp4);
+        console.log("ffmpegCommandToSoundMp4:",ffmpegCommandToSoundMp4);
+        console.log("inputFile:",inputFile);
 
-        await this.spawnffmpegAsync(ffmpegCommand, inputFile);
+        await this.spawnffmpegAsync(ffmpegCommandToSoundlessMp4);
 
-        return outputFile;
+        if(audioPath) 
+            await this.spawnffmpegAsync(ffmpegCommandToSoundMp4);
+        
+        return audioPath ? outputSoundMp4Path : outputSoundlessMp4Path;
     }   
 
-    private async spawnffmpegAsync(ffmpegCommand:any, inputFile:string): Promise<boolean> {
+    private async spawnffmpegAsync(ffmpegCommand:any): Promise<boolean> {
         return new Promise((resolve,reject)=>{
             try{
                 const ffmpegProcess = spawn(this._ffmpegPath, ffmpegCommand);
@@ -71,7 +96,7 @@ export class LocalVideoService implements IVideoService {
         
                 ffmpegProcess.on('close', (code) => {
                     if (code === 0) {
-                        console.log(`Video ${inputFile} created successfully!`);
+                        console.log(`Video created successfully!`);
                         resolve(true);
                     } else {
                         console.error(`FFmpeg process exited with code ${code}`);
