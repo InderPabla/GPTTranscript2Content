@@ -8,6 +8,7 @@ export interface ITranscript2Content {
     toSpeech(): Promise<string | undefined>;
     toImages(): Promise<string[] | undefined>;
     toVideo(): Promise<string | undefined>;
+    getRunningCost(): number;
 }
 
 export class BasicTranscript2Content implements ITranscript2Content {
@@ -20,6 +21,7 @@ export class BasicTranscript2Content implements ITranscript2Content {
     private _audioPath:string | undefined | null;
     private _videoPath:string | undefined | null;
     private _imagePaths:string[] | undefined;
+    private _runningCost: number;
 
     constructor(gptService: IGPTService, videoService: IVideoService, fetchService: IImageFetchService, transcriptFilePath: string, prefix: string, primer:string) {
         this._gptService = gptService;
@@ -28,6 +30,10 @@ export class BasicTranscript2Content implements ITranscript2Content {
         this._transcriptFilePath = transcriptFilePath;
         this._prefix = prefix;
         this._primer = primer;
+        this._runningCost = 0;
+    }
+    getRunningCost(): number {
+        return this._runningCost;
     }
 
     async toSpeech(): Promise<string | undefined> {
@@ -48,6 +54,7 @@ export class BasicTranscript2Content implements ITranscript2Content {
         }
 
         this._audioPath = inputFile || null;
+        this._runningCost += resp.cost;
         return this._audioPath || undefined;
     }
 
@@ -57,6 +64,7 @@ export class BasicTranscript2Content implements ITranscript2Content {
         const transcript = fs.readFileSync(this._transcriptFilePath).toString();
         console.log(transcript);
         const resp = await this._gptService.singleConverse(this._primer, transcript);
+        this._runningCost += resp.cost;
         const imagePaths: string[] = [];
         
         if (resp.hasErrors === false) {
@@ -74,6 +82,7 @@ export class BasicTranscript2Content implements ITranscript2Content {
                 if (resp.hasErrors === false)  {
                     imagePaths.push(...(await this._fetchService.fetch(resp.result!.urls, this._prefix)))
                 }
+                this._runningCost += resp.cost;
             }
         }
 

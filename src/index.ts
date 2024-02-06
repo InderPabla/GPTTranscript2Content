@@ -43,20 +43,24 @@ program.parse(process.argv);
         if(options.toSpeech) {
             console.log("GPTTranscript2Content: To speech");
             await contentService.toSpeech();
+            console.log(`Completed Cost: ${contentService.getRunningCost()}`);
         }
 
         if(options.toImages){
             console.log("GPTTranscript2Content: To image");
             await contentService.toImages();
+            console.log(`Completed Cost: ${contentService.getRunningCost()}`);
         }
 
         if(options.toVideo){
             console.log("GPTTranscript2Content: To video");
             await contentService.toVideo();
+            console.log(`Completed Cost: ${contentService.getRunningCost()}`);
         }
     }
     else {
         console.log("GPTTranscript2Content: No action");
+        console.log(`Completed Cost: ${contentService.getRunningCost()}`);
     }
     
 })();
